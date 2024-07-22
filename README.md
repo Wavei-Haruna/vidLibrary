@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # vidLibrary
 Video Library System for Students with Special Needs This project is a video library system designed to support students with special needs in the Information Technology education department. It provides an accessible and user-friendly platform for students to access educational videos and materials. 
 The system includes functionalities for both administrative users (admins, lecturers) and students, ensuring ease of use and comprehensive accessibility features.
@@ -24,7 +23,6 @@ Vite
 ReactJS
 Tailwind CSS
 Firebase (Authentication, Firestore, Storage)
-=======
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -33,4 +31,3 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
->>>>>>> icodewavei
