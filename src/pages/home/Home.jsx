@@ -5,7 +5,7 @@ import Contact from './Contact'
 
 export default function Home() {
   return (
-    <div>Home
+    <div className='font-header font-semibold'>Home
 
         <Hero/>
         <AboutUs/>
