@@ -11,7 +11,7 @@ const Navbar = () => {
 
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'Sign In', path: '/sign-in' },
+    { name: 'Sign In', path: '/login' },
     { name: 'Register', path: '/register' }
   ];
 

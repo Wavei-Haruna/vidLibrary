@@ -6,6 +6,7 @@ import UserManagement from './pages/admin/UserManagement';
 import VideoManagement from './pages/admin/VideoManagement';
 import Home from './pages/home/Home';
 import SignUp from './pages/auth/SignUp';
+import Login from './pages/auth/Login';
 
 function App() {
   return (
@@ -14,8 +15,9 @@ function App() {
       <div className="pt-16"> {/* Adjust padding to account for the fixed navbar */}
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* Siing Up */}
+          {/* Sign Up */}
           <Route path="/register" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
 
           <Route path="/admin/user-management" element={<UserManagement />} />
           <Route path="/admin/video-management" element={<VideoManagement />} />
