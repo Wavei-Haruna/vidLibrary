@@ -1,11 +1,7 @@
 // src/components/Navbar.js
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-<<<<<<< HEAD
 import { FaHome, FaBars, FaTimes } from 'react-icons/fa';
-=======
-import { FaHome, FaSignInAlt, FaUserPlus, FaBars, FaTimes } from 'react-icons/fa';
->>>>>>> 00ef353f5b91a9189fa8ab4861b668cfffa8d6e3
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,11 +11,7 @@ const Navbar = () => {
 
   const navItems = [
     { name: 'Home', path: '/' },
-<<<<<<< HEAD
     { name: 'Sign In', path: '/login' },
-=======
-    { name: 'Sign In', path: '/sign-in' },
->>>>>>> 00ef353f5b91a9189fa8ab4861b668cfffa8d6e3
     { name: 'Register', path: '/register' }
   ];
 

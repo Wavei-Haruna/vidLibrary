@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 // src/App.jsx
-=======
-// src/App.js
->>>>>>> 00ef353f5b91a9189fa8ab4861b668cfffa8d6e3
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -10,7 +6,6 @@ import UserManagement from './pages/admin/UserManagement';
 import VideoManagement from './pages/admin/VideoManagement';
 import Home from './pages/home/Home';
 import SignUp from './pages/auth/SignUp';
-<<<<<<< HEAD
 import Login from './pages/auth/Login';
 import LecturerDashboard from './pages/lecturer/LecturerDashboard';
 import LecturerVideos from './pages/lecturer/LecturerVideos';
@@ -48,24 +43,6 @@ function App() {
         </div>
       </Router>
     </AuthProvider>
-=======
-
-function App() {
-  return (
-    <Router>
-      <Navbar />
-      <div className="pt-16"> {/* Adjust padding to account for the fixed navbar */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          {/* Siing Up */}
-          <Route path="/register" element={<SignUp />} />
-
-          <Route path="/admin/user-management" element={<UserManagement />} />
-          <Route path="/admin/video-management" element={<VideoManagement />} />
-        </Routes>
-      </div>
-    </Router>
->>>>>>> 00ef353f5b91a9189fa8ab4861b668cfffa8d6e3
   );
 }
 
