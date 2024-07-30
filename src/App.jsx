@@ -11,7 +11,7 @@ import LecturerDashboard from './pages/lecturer/LecturerDashboard';
 import LecturerVideos from './pages/lecturer/LecturerVideos';
 import LecturerMaterials from './pages/lecturer/LecturerMaterials';
 import PrivateRoute from './components/PrivateRoute';
-import { AuthProvider } from './hooks/useAuthContext';
+import { AuthProvider } from './context/AuthContextProvider';
 import LecturerOverview from './pages/lecturer/LecturerOverview';
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
             {/* Lecturer */}
             <Route path="/lecturer-dashboard" element={<PrivateRoute allowedRoles={['lecturer']} />}>
               <Route path="" element={<LecturerDashboard />}>
-                <Route path="" element={<LecturerOverview/>} />
+                <Route path="/lecturer-dashboard/overview" element={<LecturerOverview/>} />
                 <Route path="videos" element={<LecturerVideos />} />
                 <Route path="materials" element={<LecturerMaterials />} />
               </Route>

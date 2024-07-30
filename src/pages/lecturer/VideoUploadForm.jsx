@@ -3,6 +3,7 @@ import { db, storage } from '../../firebase'; // Ensure these imports are correc
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
+import { getAuth } from 'firebase/auth';
 import Swal from 'sweetalert2';
 
 const VideoUploadForm = () => {
@@ -24,6 +25,15 @@ const VideoUploadForm = () => {
     setError('');
 
     try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        setError('You must be logged in to upload a video.');
+        setLoading(false);
+        return;
+      }
+
       let videoUrl = '';
 
       if (videoFile) {
@@ -42,6 +52,8 @@ const VideoUploadForm = () => {
         url: videoUrl,
         transcript,
         timestamp: serverTimestamp(),
+        userId: user.uid, // Include user ID
+        userEmail: user.email, // Optionally include user email
       });
 
       setTitle('');
