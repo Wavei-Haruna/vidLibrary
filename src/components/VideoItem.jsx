@@ -119,7 +119,7 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
   const displayedComments = showMoreComments ? comments : comments.slice(0, commentsPerPage);
 
   return (
-    <div key={video.id} className="bg-white p-4 shadow-md rounded-lg relative font-body">
+    <div key={video.id} className="bg-white w-full p-4 shadow-md overflow-x-hidden rounded-lg relative font-body">
       {editingVideo && editingVideo.id === video.id ? (
         <div className="absolute top-0 right-0 p-4 bg-white shadow-md rounded-lg z-10 w-80">
           <textarea
@@ -202,15 +202,15 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
               </button>
             )}
           </div>
-          <div className="flex space-x-4 mt-4">
+          <div className="flex space-x-4 mt-4 w-full  justify-between">
             <button onClick={() => onLike(video.id)} className="flex items-center text-primary hover:text-secondary">
-              <AiFillLike className="mr-1" /> Like {video.likes || 0}
+              <AiFillLike className="mr-1" /> <span className='hidden lg:flex'>  Like</span>  {video.likes || 0}
             </button>
             <button className="flex items-center text-primary hover:text-secondary">
-              <AiOutlineComment className="mr-1" /> Comment {comments.length || 0}
+              <AiOutlineComment className="mr-1" /> <span className='hidden lg:flex'>Comment  </span>  {comments.length || 0}
             </button>
             <button className="flex items-center text-primary hover:text-secondary">
-              <AiOutlineShareAlt className="mr-1" /> Share
+              <AiOutlineShareAlt className="mr-1" /> <span className='hidden lg:flex'>  Share </span>
             </button>
             {currentUser && currentUser.uid === video.userId && (
               <>

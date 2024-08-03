@@ -1,6 +1,7 @@
 // src/components/Sidebar.jsx
 import React from 'react';
 import { FaChalkboardTeacher, FaVideo, FaBook, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
+import { FaGear } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
@@ -14,8 +15,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   };
 
   return (
-    <div className={`bg-gray-800 text-white p-5 flex flex-col ${isOpen ? 'w-64' : 'w-0'} transition-width duration-300`}>
-      <button className="text-white mb-5" onClick={toggleSidebar}>
+    <div className={`bg-gray-800 text-white fixed h-screen z-50 p-5 flex flex-col ${isOpen ? 'w-64' : 'w-0 -ml-20'} transition-width duration-300`}>
+      <button className="text-white mb-5 fixed left-6 bg-primary p-3 rounded-full " onClick={toggleSidebar}>
         {isOpen ? <FaTimes /> : <FaBars />}
       </button>
       {isOpen && (
@@ -50,15 +51,28 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   <span>Manage Course Materials</span>
                 </button>
               </li>
+              <li className="mb-4 mt-16">
+                <button
+                  className="flex items-center space-x-3 font-semibold"
+                  onClick={() => navigate('/lecturer-dashboard/materials')}
+                >
+                  <FaGear />
+                  <span>Settings</span>
+                </button>
+              </li>
+              <li className="mb-4">
+
+              <button
+                  className="flex items-center space-x-3 font-semibold "
+                  onClick={handleLogout}
+                >
+                <FaSignOutAlt />
+              <span>Logout</span>
+            </button>
+              </li>
             </ul>
           </nav>
-          <button
-            className="flex items-center space-x-3 font-semibold mt-10"
-            onClick={handleLogout}
-          >
-            <FaSignOutAlt />
-            <span>Logout</span>
-          </button>
+         
         </>
       )}
     </div>
