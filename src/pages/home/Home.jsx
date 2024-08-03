@@ -8,8 +8,8 @@ export default function Home() {
   return (
     <div className='font-header font-semibold'>Home
 
-        {/* <Hero/>
-        <AllVideos/> */}
+        {/* <Hero/> */}
+        <AllVideos/>
     </div>
   )
 }
