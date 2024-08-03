@@ -26,10 +26,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               <li className="mb-4">
                 <button
                   className="flex items-center space-x-3 font-semibold"
-                  onClick={() => navigate('/lecturer-dashboard')}
+                  onClick={() => navigate('/lecturer-dashboard/overview')}
                 >
                   <FaChalkboardTeacher />
-                  <span>Dashboard</span>
+                  <span>Overview</span>
                 </button>
               </li>
               <li className="mb-4">
