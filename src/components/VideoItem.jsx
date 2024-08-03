@@ -158,11 +158,11 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
           <hr className="mb-4" />
           <div className="mb-4">
             <p className={`text-gray-700 ${expandedDescription ? '' : 'truncate'}`}>
-              {video.description.length > 250 && !expandedDescription
+              {video.description?.length > 250 && !expandedDescription
                 ? `${video.description.slice(0, 250)}...`
                 : video.description}
             </p>
-            {video.description.length > 250 && (
+            {video.description?.length > 250 && (
               <button
                 onClick={toggleDescription}
                 className="text-primary hover:text-secondary"
@@ -189,11 +189,11 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
           )}
           <div className="mb-4">
             <p className={`text-gray-700 ${expandedTranscript ? '' : 'truncate'}`}>
-              {video.transcript.length > 250 && !expandedTranscript
+              {video.transcript?.length > 250 && !expandedTranscript
                 ? `${video.transcript.slice(0, 250)}...`
                 : video.transcript}
             </p>
-            {video.transcript.length > 250 && (
+            {video.transcript?.length > 250 && (
               <button
                 onClick={toggleTranscript}
                 className="text-primary hover:text-secondary"
@@ -207,7 +207,7 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
               <AiFillLike className="mr-1" /> <span className='hidden lg:flex'>  Like</span>  {video.likes || 0}
             </button>
             <button className="flex items-center text-primary hover:text-secondary">
-              <AiOutlineComment className="mr-1" /> <span className='hidden lg:flex'>Comment  </span>  {comments.length || 0}
+              <AiOutlineComment className="mr-1" /> <span className='hidden lg:flex'>Comment  </span>  {comments?.length || 0}
             </button>
             <button className="flex items-center text-primary hover:text-secondary">
               <AiOutlineShareAlt className="mr-1" /> <span className='hidden lg:flex'>  Share </span>
@@ -244,7 +244,7 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
                 <div key={comment.id} className="mb-4 p-2 border border-gray-300 rounded">
                   <p className="font-semibold">{comment.username}</p>
                   <p className="text-gray-700 mb-2">{comment.text}</p>
-                  {comment.replies.length > 0 && (
+                  {comment.replies?.length > 0 && (
                     <div className="pl-4">
                       {comment.replies.map((reply) => (
                         <div key={reply.id} className="mb-2 p-2 border border-gray-200 rounded">
@@ -279,7 +279,7 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
                   )}
                 </div>
               ))}
-              {comments.length > commentsPerPage && (
+              {comments?.length > commentsPerPage && (
                 <button
                   onClick={handleShowMoreComments}
                   className="text-primary hover:text-secondary"
