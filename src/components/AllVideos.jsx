@@ -12,7 +12,7 @@ const AllVideos = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState({});
-  let VideoItems;
+  
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -71,7 +71,9 @@ const AllVideos = () => {
   };
 
   if (loading) {
-    return <Skeleton count={5} />;
+
+    
+    return<Skeleton count={35}  className='flex mr-10' />
   }
 
   if (videos?.length === 0) {
