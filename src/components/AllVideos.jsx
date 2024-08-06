@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
-import { collection, getDocs,  updateDoc, doc,  } from 'firebase/firestore';
-
+import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import useAuth from '../hooks/useAuth';
 import VideoItem from './VideoItem';
+import Swal from 'sweetalert2';
 
 const AllVideos = () => {
   const { currentUser } = useAuth();
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState({});
-  
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -21,8 +20,6 @@ const AllVideos = () => {
         const videoSnapshot = await getDocs(videoCollection);
         const videoList = videoSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setVideos(videoList);
-
-        console.log(videoList)
       } catch (error) {
         console.error('Error fetching videos:', error);
       } finally {
@@ -34,9 +31,18 @@ const AllVideos = () => {
   }, []);
 
   const handleLike = async (id) => {
+    if (!currentUser) {
+      Swal.fire({
+        title: 'Authentication Required',
+        text: 'You must be logged in to like videos.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
     const videoRef = doc(db, 'videos', id);
     const video = videos.find((video) => video.id === id);
-
     const userHasLiked = video.likedBy?.includes(currentUser.uid);
 
     if (!userHasLiked) {
@@ -53,6 +59,16 @@ const AllVideos = () => {
   };
 
   const handleComment = async (id) => {
+    if (!currentUser) {
+      Swal.fire({
+        title: 'Authentication Required',
+        text: 'You must be logged in to comment on videos.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
     const videoRef = doc(db, 'videos', id);
     await updateDoc(videoRef, {
       comments: [
@@ -71,9 +87,7 @@ const AllVideos = () => {
   };
 
   if (loading) {
-
-    
-    return<Skeleton count={35}  className='flex mr-10' />
+    return <Skeleton count={35} className='flex mr-10' />;
   }
 
   if (videos?.length === 0) {

@@ -37,7 +37,7 @@ const Login = () => {
         } else if (role === 'lecturer') {
           navigate('/lecturer-dashboard');
         } else if (role === 'admin') {
-          navigate('/admin/user-management');
+          navigate('/admin');
         }
       }
     } catch (error) {
