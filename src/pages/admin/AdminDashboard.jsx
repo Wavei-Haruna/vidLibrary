@@ -10,7 +10,7 @@ const AdminDashboard = () => {
   return (
     <div className="flex h-screen container mx-auto p-4 relative top-8">
 
-        <h1>Welcome</h1>
+        
       <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <div className="flex-1">
         <MainPanel>
