@@ -39,16 +39,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   onClick={() => navigate('/lecturer-dashboard/videos')}
                 >
                   <FaVideo />
-                  <span>Manage Videos</span>
+                  <span>Upload Video</span>
                 </button>
               </li>
               <li className="mb-4">
                 <button
                   className="flex items-center space-x-3 font-semibold"
-                  onClick={() => navigate('/lecturer-dashboard/materials')}
+                  onClick={() => navigate('/lecturer-dashboard/ebooks')}
                 >
                   <FaBook />
-                  <span>Manage Course Materials</span>
+                  <span>Upload Ebook</span>
                 </button>
               </li>
               <li className="mb-4 mt-16">
