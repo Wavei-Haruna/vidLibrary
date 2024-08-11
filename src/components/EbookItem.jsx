@@ -4,77 +4,83 @@ import { AiFillLike, AiOutlineEdit, AiOutlineDelete, AiOutlineComment, AiOutline
 import moment from 'moment';
 import { db } from '../firebase';
 import useAuth from '../hooks/useAuth';
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
-const VideoItem = ({ video, onEdit, onDelete }) => {
+const PDFDocument = ({ file }) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.section}>
+        <Text>PDF content is rendered from URL: {file}</Text> {/* Customize as needed */}
+      </View>
+    </Page>
+  </Document>
+);
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    flexGrow: 1,
+  },
+});
+
+const EbookItem = ({ ebook, onEdit, onDelete, onLike }) => {
   const { currentUser } = useAuth();
-  const [expandedTranscript, setExpandedTranscript] = useState(false);
-  const [expandedDescription, setExpandedDescription] = useState(false);
-  const [editingVideo, setEditingVideo] = useState(null);
+  const [editingEbook, setEditingEbook] = useState(null);
   const [commentText, setCommentText] = useState('');
-  const [comments, setComments] = useState(video.comments || []);
+  const [comments, setComments] = useState(ebook.comments || []);
   const [showMoreComments, setShowMoreComments] = useState(false);
   const [replyText, setReplyText] = useState({});
+  const [expandedDescription, setExpandedDescription] = useState(false);
   const commentsPerPage = 5;
 
   useEffect(() => {
-    setComments(video.comments || []);
-  }, [video.comments]);
-
-  const getYouTubeVideoId = (url) => {
-    const regex = /^.*(youtu.be\/|v\/|u\/w\/|embed\/|watch\?v=|watch\?.+&v=|\/videos\/|\/video\/|\/shorts\/|\/videos\/|\/playlist\/|\/playlist\?list=)([^"&?\/\s]{11})/;
-    const match = url.match(regex);
-    return match ? match[2] : null;
-  };
-
-  const embedUrl = getYouTubeVideoId(video.url) ? `https://www.youtube.com/embed/${getYouTubeVideoId(video.url)}` : '';
-
-  const toggleTranscript = () => {
-    setExpandedTranscript((prev) => !prev);
-  };
-
-  const toggleDescription = () => {
-    setExpandedDescription((prev) => !prev);
-  };
+    setComments(ebook.comments || []);
+  }, [ebook.comments]);
 
   const handleSaveEdit = async () => {
-    const videoRef = doc(db, 'videos', editingVideo.id);
-    await updateDoc(videoRef, {
-      title: editingVideo.title,
-      description: editingVideo.description,
+    const ebookRef = doc(db, 'ebooks', editingEbook.id);
+    await updateDoc(ebookRef, {
+      title: editingEbook.title,
+      description: editingEbook.description,
     });
-    onEdit(editingVideo);
-    setEditingVideo(null);
+    onEdit(editingEbook);
+    setEditingEbook(null);
   };
 
   const handleDelete = async () => {
-    await deleteDoc(doc(db, 'videos', video.id));
-    onDelete(video.id);
+    await deleteDoc(doc(db, 'ebooks', ebook.id));
+    onDelete(ebook.id);
   };
 
   const handleDeleteComment = async (commentId) => {
-    const videoRef = doc(db, 'videos', video.id);
+    const ebookRef = doc(db, 'ebooks', ebook.id);
     const updatedComments = comments.filter((comment) => comment.id !== commentId);
-    await updateDoc(videoRef, { comments: updatedComments });
+    await updateDoc(ebookRef, { comments: updatedComments });
     setComments(updatedComments);
   };
 
   const handleCommentChange = (e) => {
-    setCommentText(e.target.value); // Update comment text
+    setCommentText(e.target.value);
   };
 
   const handleCommentSubmit = async (e) => {
-    e.preventDefault(); // Prevent page refresh
+    e.preventDefault();
     if (commentText.trim()) {
       const newComment = {
-        id: Date.now().toString(), // Unique ID for the comment
+        id: Date.now().toString(),
         text: commentText,
         username: currentUser?.displayName || 'Anonymous',
-        timestamp: new Date().toISOString(), // Client-side timestamp
-        replies: [], // Initialize replies array
+        timestamp: new Date().toISOString(),
+        replies: [],
       };
-      const videoRef = doc(db, 'videos', video.id);
+      const ebookRef = doc(db, 'ebooks', ebook.id);
       const updatedComments = [...comments, newComment];
-      await updateDoc(videoRef, { comments: updatedComments });
+      await updateDoc(ebookRef, { comments: updatedComments });
       setComments(updatedComments);
       setCommentText('');
     }
@@ -87,7 +93,7 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
   const handleReplySubmit = async (commentId, e) => {
     e.preventDefault();
     if (replyText[commentId]?.trim()) {
-      const videoRef = doc(db, 'videos', video.id);
+      const ebookRef = doc(db, 'ebooks', ebook.id);
       const updatedComments = comments.map((comment) => {
         if (comment.id === commentId) {
           return {
@@ -95,17 +101,17 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
             replies: [
               ...comment.replies,
               {
-                id: Date.now().toString(), // Unique ID for the reply
+                id: Date.now().toString(),
                 text: replyText[commentId],
                 username: currentUser?.displayName || 'Anonymous',
-                timestamp: new Date().toISOString(), // Client-side timestamp
+                timestamp: new Date().toISOString(),
               },
             ],
           };
         }
         return comment;
       });
-      await updateDoc(videoRef, { comments: updatedComments });
+      await updateDoc(ebookRef, { comments: updatedComments });
       setComments(updatedComments);
       setReplyText((prev) => ({ ...prev, [commentId]: '' }));
     }
@@ -115,22 +121,21 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
     setShowMoreComments((prev) => !prev);
   };
 
-  // Get paginated comments
   const displayedComments = showMoreComments ? comments : comments.slice(0, commentsPerPage);
 
   return (
-    <div key={video.id} className="bg-white w-full p-4 shadow-md overflow-x-hidden rounded-lg relative font-body">
-      {editingVideo && editingVideo.id === video.id ? (
+    <div key={ebook.id} className="bg-white w-full p-4 shadow-md overflow-x-hidden rounded-lg relative font-body">
+      {editingEbook && editingEbook.id === ebook.id ? (
         <div className="absolute top-0 right-0 p-4 bg-white shadow-md rounded-lg z-10 w-80">
           <textarea
-            value={editingVideo.title}
-            onChange={(e) => setEditingVideo((prev) => ({ ...prev, title: e.target.value }))}
+            value={editingEbook.title}
+            onChange={(e) => setEditingEbook((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full mb-2 border border-gray-300 p-2 rounded"
             placeholder="Edit title"
           />
           <textarea
-            value={editingVideo.description}
-            onChange={(e) => setEditingVideo((prev) => ({ ...prev, description: e.target.value }))}
+            value={editingEbook.description}
+            onChange={(e) => setEditingEbook((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full mb-2 border border-gray-300 p-2 rounded"
             placeholder="Edit description"
           />
@@ -142,7 +147,7 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
               Save
             </button>
             <button
-              onClick={() => setEditingVideo(null)}
+              onClick={() => setEditingEbook(null)}
               className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
             >
               Cancel
@@ -152,73 +157,47 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
       ) : (
         <>
           <div className='flex justify-between'>
-            <h2 className="text-xl font-semibold mb-2 text-secondary font-header">{video.title}</h2>
-            <p className="text-gray-500 text-sm mb-4">{moment(video.timestamp?.toDate()).fromNow()}</p>
+            <h2 className="text-xl font-semibold mb-2 text-secondary font-header">{ebook.title}</h2>
+            <p className="text-gray-500 text-sm mb-4">{moment(ebook.timestamp?.toDate()).fromNow()}</p>
           </div>
           <hr className="mb-4" />
           <div className="mb-4">
             <p className={`text-gray-700 ${expandedDescription ? '' : 'truncate'}`}>
-              {video.description?.length > 250 && !expandedDescription
-                ? `${video.description.slice(0, 250)}...`
-                : video.description}
+              {ebook.description?.length > 250 && !expandedDescription
+                ? `${ebook.description.slice(0, 250)}...`
+                : ebook.description}
             </p>
-            {video.description?.length > 250 && (
+            {ebook.description?.length > 250 && (
               <button
-                onClick={toggleDescription}
+                onClick={() => setExpandedDescription((prev) => !prev)}
                 className="text-primary hover:text-secondary"
               >
                 {expandedDescription ? 'Show Less' : 'Read More'}
               </button>
             )}
           </div>
-          {embedUrl ? (
-            <div className="relative mb-4">
-              <iframe
-                width="100%"
-                height="315"
-                src={embedUrl}
-                title={video.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
-            </div>
-          ) : (
-            <p className="text-red-500">Invalid video URL</p>
-          )}
           <div className="mb-4">
-            <p className={`text-gray-700 ${expandedTranscript ? '' : 'truncate'}`}>
-              {video.transcript?.length > 250 && !expandedTranscript
-                ? `${video.transcript.slice(0, 250)}...`
-                : video.transcript}
-            </p>
-            {video.transcript?.length > 250 && (
-              <button
-                onClick={toggleTranscript}
-                className="text-primary hover:text-secondary"
-              >
-                {expandedTranscript ? 'Show Less' : 'Show More'}
-              </button>
-            )}
+            <PDFDownloadLink document={<PDFDocument file={ebook.url} />} fileName="download.pdf">
+              {({ loading }) => (loading ? 'Loading document...' : 'Download PDF')}
+            </PDFDownloadLink>
           </div>
-          <div className="flex space-x-4 mt-4 w-full  justify-between">
-            <button onClick={() => onLike(video.id)} className="flex items-center text-primary hover:text-secondary">
-              <AiFillLike className="mr-1" /> <span className='hidden lg:flex'>  Like</span>  {video.likes || 0}
+          <div className="flex space-x-4 mt-4 w-full justify-between">
+            <button onClick={() => onLike(ebook.id)} className="flex items-center text-primary hover:text-secondary">
+              <AiFillLike className="mr-1" /> <span className='hidden lg:flex'> Like</span> {ebook.likes || 0}
             </button>
             <button className="flex items-center text-primary hover:text-secondary">
-              <AiOutlineComment className="mr-1" /> <span className='hidden lg:flex'>Comment  </span>  {comments?.length || 0}
+              <AiOutlineComment className="mr-1" /> <span className='hidden lg:flex'>Comment </span> {comments?.length || 0}
             </button>
             <button className="flex items-center text-primary hover:text-secondary">
-              <AiOutlineShareAlt className="mr-1" /> <span className='hidden lg:flex'>  Share </span>
+              <AiOutlineShareAlt className="mr-1" /> <span className='hidden lg:flex'> Share </span>
             </button>
-            {currentUser && currentUser.uid === video.userId && (
+            {currentUser && currentUser.uid === ebook.userId && (
               <>
-                <button onClick={() => setEditingVideo(video)} className="flex items-center text-primary hover:text-secondary">
-                  <AiOutlineEdit className="mr-1" /> 
+                <button onClick={() => setEditingEbook(ebook)} className="flex items-center text-primary hover:text-secondary">
+                  <AiOutlineEdit className="mr-1" />
                 </button>
                 <button onClick={handleDelete} className="flex items-center text-red-500 hover:text-red-600">
-                  <AiOutlineDelete className="mr-1" /> 
+                  <AiOutlineDelete className="mr-1" />
                 </button>
               </>
             )}
@@ -228,7 +207,7 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
               <textarea
                 value={commentText}
                 onChange={handleCommentChange}
-                className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-800  transition-all ease-out"
+                className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-800 transition-all ease-out"
                 placeholder="Add a comment..."
                 rows="3"
               />
@@ -258,7 +237,7 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
                     <textarea
                       value={replyText[comment.id] || ''}
                       onChange={(e) => handleReplyChange(comment.id, e)}
-                      className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-800  transition-all ease-out"
+                      className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-800 transition-all ease-out"
                       placeholder="Reply..."
                       rows="2"
                     />
@@ -269,7 +248,7 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
                       Reply
                     </button>
                   </form>
-                  {currentUser && currentUser.uid === video.userId && (
+                  {currentUser && currentUser.uid === ebook.userId && (
                     <button
                       onClick={() => handleDeleteComment(comment.id)}
                       className="text-red-500 mt-2 hover:text-red-600"
@@ -295,4 +274,4 @@ const VideoItem = ({ video, onEdit, onDelete }) => {
   );
 };
 
-export default VideoItem;
+export default EbookItem;
