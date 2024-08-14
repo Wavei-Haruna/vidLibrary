@@ -12,6 +12,9 @@ const VideoUploadForm = () => {
   const [videoLink, setVideoLink] = useState('');
   const [videoFile, setVideoFile] = useState(null);
   const [transcript, setTranscript] = useState('');
+  const [courseId, setCourseId] = useState('');
+  const [lectureName, setLectureName] = useState('');
+  const [semester, setSemester] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -51,6 +54,9 @@ const VideoUploadForm = () => {
         description,
         url: videoUrl,
         transcript,
+        courseId,
+        lectureName,
+        semester,
         timestamp: serverTimestamp(),
         userId: user.uid, // Include user ID
         userEmail: user.email, // Optionally include user email
@@ -61,6 +67,9 @@ const VideoUploadForm = () => {
       setVideoLink('');
       setVideoFile(null);
       setTranscript('');
+      setCourseId('');
+      setLectureName('');
+      setSemester('');
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -79,16 +88,16 @@ const VideoUploadForm = () => {
   };
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-lg max-w-lg mx-auto mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Upload Video</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="p-6 bg-white shadow-lg rounded-lg max-w-lg mx-auto mt-10">
+      <h2 className="text-3xl font-bold mb-6 text-center  font-header text-orange-500">Upload Video</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
             placeholder="Enter video title"
             required
           />
@@ -98,9 +107,9 @@ const VideoUploadForm = () => {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
             placeholder="Enter video description"
-            rows="3"
+            rows="4"
             required
           />
         </div>
@@ -110,16 +119,16 @@ const VideoUploadForm = () => {
             type="text"
             value={videoLink}
             onChange={(e) => setVideoLink(e.target.value)}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
             placeholder="Enter video link"
           />
         </div>
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">Or Upload Video File</label>
+        <div className='hidden'>
+          <label className=" mb-2 text-sm font-medium text-gray-700 ">Or Upload Video File</label>
           <input
             type="file"
             onChange={handleFileChange}
-            className="w-full border rounded focus:ring-2 focus:ring-blue-600 outline-none"
+            className="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
           />
         </div>
         <div>
@@ -127,15 +136,48 @@ const VideoUploadForm = () => {
           <textarea
             value={transcript}
             onChange={(e) => setTranscript(e.target.value)}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
             placeholder="Enter video transcript"
             rows="6"
           />
         </div>
-        {error && <p className="text-red-500">{error}</p>}
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">Course ID</label>
+          <input
+            type="text"
+            value={courseId}
+            onChange={(e) => setCourseId(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+            placeholder="Enter course ID"
+            required
+          />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">Lecture Name</label>
+          <input
+            type="text"
+            value={lectureName}
+            onChange={(e) => setLectureName(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+            placeholder="Enter lecture name"
+            required
+          />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">Semester</label>
+          <input
+            type="text"
+            value={semester}
+            onChange={(e) => setSemester(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+            placeholder="Enter semester"
+            required
+          />
+        </div>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
         <button
           type="submit"
-          className={`w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 ${loading && 'opacity-50 cursor-not-allowed'}`}
+          className={`w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ${loading && 'opacity-50 cursor-not-allowed'}`}
           disabled={loading}
         >
           {loading ? 'Uploading...' : 'Upload Video'}

@@ -12,6 +12,7 @@ const AllVideos = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState({});
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -86,27 +87,49 @@ const AllVideos = () => {
     setCommentText((prev) => ({ ...prev, [id]: '' }));
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
+  // Filter videos based on search query
+  const filteredVideos = videos.filter((video) =>
+    video.title?.toLowerCase().includes(searchQuery) ||
+    video.description?.toLowerCase().includes(searchQuery)
+  );
+
   if (loading) {
     return <Skeleton count={35} className='flex mr-10' />;
   }
 
-  if (videos?.length === 0) {
+  if (filteredVideos.length === 0) {
     return <p>No videos found.</p>;
   }
 
   return (
-    <div className="gap-10 my-6 grid lg:grid-cols-2">
-      {videos.map((video) => (
-        <VideoItem
-          key={video.id}
-          video={video}
-          onLike={handleLike}
-          onComment={handleComment}
-          commentText={commentText}
-          setCommentText={setCommentText}
+    <section className=' px-2 mx-auto relative  bg-gradient-to-b w-screen from-gray-800 to-gray-900 overflow-x-hidden '> 
+      <div className="mb-2 fixed z-50 top-20 w-72  my-0 shadow-lg mx-auto">
+
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="Search videos..."
+          className="w-full mx-auto p-3 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-300 focus:border-transparent transition duration-300 ease-in-out"
         />
-      ))}
-    </div>
+      </div>
+      <div className="gap-10 my-6 grid lg:grid-cols-2 mx-auto container relative top-16">
+        {filteredVideos.map((video) => (
+          <VideoItem
+            key={video.id}
+            video={video}
+            onLike={handleLike}
+            onComment={handleComment}
+            commentText={commentText}
+            setCommentText={setCommentText}
+          />
+        ))}
+      </div>
+    </section>
   );
 };
 

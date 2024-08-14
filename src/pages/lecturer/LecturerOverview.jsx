@@ -9,7 +9,7 @@ export default function LecturerOverview() {
 
    
 
-   {/* <VideoList/> */}
+  <VideoList/> 
    <EbookList/>
 
     </div>
