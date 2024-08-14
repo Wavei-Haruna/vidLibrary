@@ -1,11 +1,24 @@
 // src/components/Sidebar.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaUser, FaVideo, FaUserCog, FaHome, FaSignOutAlt, FaChevronRight, FaChevronLeft } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaUser, FaVideo, FaUserCog, FaHome, FaSignOutAlt, FaChevronRight, FaChevronLeft, FaBook } from 'react-icons/fa';
+// import { auth } from 'firebase-admin';
+import Swal from 'sweetalert2';
+import { auth } from '../../firebase';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
+const navigate = useNavigate();
+  const handleLogout = () => {
+   
+    auth.signOut();
+    Swal.fire({ title: 'Success!',
+      text: 'Password reset email sent.',
+      icon: 'success',
+      confirmButtonText: 'OK'})
+    navigate('/login');
+  };
   return (
-    <div className={`fixed inset-y-0 left-0 top-24 transform ${isOpen ? '-translate-x-3' : '-translate-x-full'} transition-transform duration-200 ease-in-out bg-primary w-64 rounded-t-xl`}>
+    <div className={`fixed inset-y-0 left-0 z-50 top-24 transform ${isOpen ? '-translate-x-3' : '-translate-x-full'} transition-transform duration-200 ease-in-out bg-primary w-64 rounded-t-xl`}>
       <div className="p-4 flex items-center justify-between">
         <span className="text-white text-2xl font-bold my-6">Admin</span>
         <button
@@ -30,9 +43,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         <Link to="/admin/video-management" className="block py-2.5 px-4 rounded hover:bg-secondary text-white flex items-center">
           <FaVideo className="mr-3" /> Video Management
         </Link>
-        <Link to="/admin/logout" className="block py-2.5 px-4 rounded hover:bg-secondary text-white flex items-center">
-          <FaSignOutAlt className="mr-3" /> Logout
+        <Link to="/admin/ebook-management" className="block py-2.5 px-4 rounded hover:bg-secondary text-white flex items-center">
+          <FaBook className="mr-3" /> Ebook Management
         </Link>
+        <li className="mb-4">
+
+<button
+    className="flex items-center space-x-3 font-semibold my-16 text-orange-600"
+    onClick={handleLogout}
+  >
+  <FaSignOutAlt />
+<span className='text-orange-600'>Logout</span>
+</button>
+</li>
       </nav>
     </div>
   );
