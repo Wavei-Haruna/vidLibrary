@@ -126,11 +126,11 @@ const EbookItem = ({ ebook, onEdit, onDelete, onLike }) => {
   return (
     <div key={ebook.id} className="bg-white w-full p-4 shadow-md overflow-x-hidden rounded-lg relative font-body">
       {editingEbook && editingEbook.id === ebook.id ? (
-        <div className="absolute top-0 right-0 p-4 bg-white shadow-md rounded-lg z-10 w-80">
+        <div className="absolute top-0 right-0 p-4 bg-white shadow-md rounded-lg z-10 w-80 ">
           <textarea
             value={editingEbook.title}
             onChange={(e) => setEditingEbook((prev) => ({ ...prev, title: e.target.value }))}
-            className="w-full mb-2 border border-gray-300 p-2 rounded"
+            className="w-full h-64 mb-2 border border-gray-300 p-2 rounded"
             placeholder="Edit title"
           />
           <textarea
@@ -156,40 +156,54 @@ const EbookItem = ({ ebook, onEdit, onDelete, onLike }) => {
         </div>
       ) : (
         <>
-          <div className='flex justify-between'>
+          <div className="flex justify-between">
             <h2 className="text-xl font-semibold mb-2 text-secondary font-header">{ebook.title}</h2>
             <p className="text-gray-500 text-sm mb-4">{moment(ebook.timestamp?.toDate()).fromNow()}</p>
           </div>
           <hr className="mb-4" />
-          <div className="mb-4">
-            <p className={`text-gray-700 ${expandedDescription ? '' : 'truncate'}`}>
-              {ebook.description?.length > 250 && !expandedDescription
-                ? `${ebook.description.slice(0, 250)}...`
-                : ebook.description}
-            </p>
-            {ebook.description?.length > 250 && (
-              <button
-                onClick={() => setExpandedDescription((prev) => !prev)}
-                className="text-primary hover:text-secondary"
-              >
-                {expandedDescription ? 'Show Less' : 'Read More'}
-              </button>
-            )}
-          </div>
-          <div className="mb-4">
-            <PDFDownloadLink document={<PDFDocument file={ebook.url} />} fileName="download.pdf">
-              {({ loading }) => (loading ? 'Loading document...' : 'Download PDF')}
-            </PDFDownloadLink>
+          <div className="flex flex-col lg:flex-row mb-4">
+            <img
+              src={ebook.imageUrl}
+              alt={ebook.title}
+              className="object-cover w-full lg:w-1/3 h-40 rounded-lg mb-4 lg:mb-0 lg:mr-4"
+            />
+            <div>
+              <p className={`text-gray-700 ${expandedDescription ? '' : 'truncate'}`}>
+                {ebook.description?.length > 250 && !expandedDescription
+                  ? `${ebook.description.slice(0, 250)}...`
+                  : ebook.description}
+              </p>
+              {ebook.description?.length > 250 && (
+                <button
+                  onClick={() => setExpandedDescription((prev) => !prev)}
+                  className="text-primary hover:text-secondary"
+                >
+                  {expandedDescription ? 'Show Less' : 'Read More'}
+                </button>
+              )}
+              <div className="mt-4">
+                <PDFDownloadLink document={<PDFDocument file={ebook.url} />} fileName={`${ebook.title}.pdf`}>
+                  {({ loading }) => (
+                    <button
+                      className="bg-green-500 text-white py-2 px-4 rounded"
+                      disabled={loading}
+                    >
+                      {loading ? 'Preparing...' : 'Download eBook'}
+                    </button>
+                  )}
+                </PDFDownloadLink>
+              </div>
+            </div>
           </div>
           <div className="flex space-x-4 mt-4 w-full justify-between">
             <button onClick={() => onLike(ebook.id)} className="flex items-center text-primary hover:text-secondary">
-              <AiFillLike className="mr-1" /> <span className='hidden lg:flex'> Like</span> {ebook.likes || 0}
+              <AiFillLike className="mr-1" /> <span className="hidden lg:flex">Like</span> {ebook.likes || 0}
             </button>
             <button className="flex items-center text-primary hover:text-secondary">
-              <AiOutlineComment className="mr-1" /> <span className='hidden lg:flex'>Comment </span> {comments?.length || 0}
+              <AiOutlineComment className="mr-1" /> <span className="hidden lg:flex">Comment</span> {comments?.length || 0}
             </button>
             <button className="flex items-center text-primary hover:text-secondary">
-              <AiOutlineShareAlt className="mr-1" /> <span className='hidden lg:flex'> Share </span>
+              <AiOutlineShareAlt className="mr-1" /> <span className="hidden lg:flex">Share</span>
             </button>
             {currentUser && currentUser.uid === ebook.userId && (
               <>
@@ -203,65 +217,67 @@ const EbookItem = ({ ebook, onEdit, onDelete, onLike }) => {
             )}
           </div>
           <div className="mt-4">
-            <form onSubmit={handleCommentSubmit} className="mb-4">
+          <form onSubmit={handleCommentSubmit} className="mb-4">
               <textarea
                 value={commentText}
                 onChange={handleCommentChange}
-                className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-800 transition-all ease-out"
+                className="w-full border border-gray-300 p-2 rounded"
                 placeholder="Add a comment..."
-                rows="3"
+                rows={2}
               />
-              <button
-                type="submit"
-                className="bg-primary text-white py-1 px-3 rounded mt-2 hover:bg-secondary"
-              >
-                comment
-              </button>
+              <div className="flex justify-end mt-2">
+                <button type="submit" className="bg-primary text-white py-1 px-3 rounded hover:bg-secondary">
+                  Post Comment
+                </button>
+              </div>
             </form>
             <div>
               {displayedComments.map((comment) => (
-                <div key={comment.id} className="mb-4 p-2 border border-gray-300 rounded">
-                  <p className="font-semibold">{comment.username}</p>
-                  <p className="text-gray-700 mb-2">{comment.text}</p>
-                  {comment.replies?.length > 0 && (
-                    <div className="pl-4">
-                      {comment.replies.map((reply) => (
-                        <div key={reply.id} className="mb-2 p-2 border border-gray-200 rounded">
-                          <p className="font-semibold">{reply.username}</p>
-                          <p className="text-gray-700">{reply.text}</p>
-                        </div>
-                      ))}
+                <div key={comment.id} className="mb-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm font-semibold">{comment.username}</p>
+                      <p className="text-gray-600 text-sm">{moment(comment.timestamp).fromNow()}</p>
                     </div>
-                  )}
+                    {currentUser && currentUser.uid === ebook.userId && (
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="text-red-500 hover:text-red-600 text-sm"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-gray-700 mt-2">{comment.text}</p>
                   <form onSubmit={(e) => handleReplySubmit(comment.id, e)} className="mt-2">
                     <textarea
                       value={replyText[comment.id] || ''}
                       onChange={(e) => handleReplyChange(comment.id, e)}
-                      className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-800 transition-all ease-out"
+                      className="w-full border border-gray-300 p-2 rounded"
                       placeholder="Reply..."
-                      rows="2"
+                      rows={2}
                     />
-                    <button
-                      type="submit"
-                      className="bg-primary text-white py-1 px-3 rounded mt-2 hover:bg-secondary"
-                    >
-                      Reply
-                    </button>
+                    <div className="flex justify-end mt-2">
+                      <button type="submit" className="bg-primary text-white py-1 px-3 rounded hover:bg-secondary">
+                        Reply
+                      </button>
+                    </div>
                   </form>
-                  {currentUser && currentUser.uid === ebook.userId && (
-                    <button
-                      onClick={() => handleDeleteComment(comment.id)}
-                      className="text-red-500 mt-2 hover:text-red-600"
-                    >
-                      Delete Comment
-                    </button>
-                  )}
+                  <div className="mt-2 ml-4">
+                    {comment.replies.map((reply) => (
+                      <div key={reply.id} className="mb-2">
+                        <p className="text-sm font-semibold">{reply.username}</p>
+                        <p className="text-gray-600 text-sm">{moment(reply.timestamp).fromNow()}</p>
+                        <p className="text-gray-700 mt-1">{reply.text}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
-              {comments?.length > commentsPerPage && (
+              {comments.length > commentsPerPage && (
                 <button
                   onClick={handleShowMoreComments}
-                  className="text-primary hover:text-secondary"
+                  className="text-primary hover:text-secondary mt-2"
                 >
                   {showMoreComments ? 'Show Less Comments' : 'Show More Comments'}
                 </button>
