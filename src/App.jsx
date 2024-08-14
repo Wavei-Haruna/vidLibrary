@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import UserManagement from './pages/admin/UserManagement';
 import VideoManagement from './pages/admin/VideoManagement';
 import Home from './pages/home/Home';
 import SignUp from './pages/auth/SignUp';
@@ -16,17 +15,23 @@ import Overview from './pages/admin/Overview';
 import Profile from './pages/admin/Profile';
 import Logout from './pages/admin/Logout';
 import EbookUploadForm from './pages/lecturer/EbookUpLoadForm';
+import ManageUsers from './pages/admin/ManageUsers';
+import EbookManagement from './pages/admin/EbookManagement';
+import AllVideos from './components/AllVideos';
+import AllEbooks from './components/AllEbooks';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Navbar />
-        <div className="pt-16"> {/* Adjust padding to account for the fixed navbar */}
+        <div className="pt-16  overflow-x-hidden mx-auto from-gray-800 to-gray-900"> {/* Adjust padding to account for the fixed navbar */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/videos" element={<AllVideos/>} />
+            <Route path="/ebooks" element={<AllEbooks/>} />
             {/* Lecturer */}
             <Route path="/lecturer-dashboard/*" element={<PrivateRoute allowedRoles={['lecturer']} />}>
               <Route path="" element={<LecturerDashboard />}>
@@ -41,8 +46,9 @@ function App() {
                 <Route path="overview" element={<Overview />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="logout" element={<Logout />} />
-                <Route path="user-management" element={<UserManagement />} />
+                <Route path="user-management" element={<ManageUsers />} />
                 <Route path="video-management" element={<VideoManagement />} />
+                <Route path="ebook-management" element={<EbookManagement />} />
               </Route>
             </Route>
           </Routes>

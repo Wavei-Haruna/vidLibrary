@@ -3,14 +3,18 @@ import React from 'react';
 import { FaChalkboardTeacher, FaVideo, FaBook, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
 import { FaGear } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../../firebase';
+import Swal from 'sweetalert2';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
-
   const handleLogout = () => {
-    // Handle logout logic here
-    // For example, sign out from Firebase auth
-    // auth.signOut();
+   
+    auth.signOut();
+    Swal.fire({ title: 'Success!',
+      text: 'Password reset email sent.',
+      icon: 'success',
+      confirmButtonText: 'OK'})
     navigate('/login');
   };
 
@@ -51,7 +55,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   <span>Upload Ebook</span>
                 </button>
               </li>
-              <li className="mb-4 mt-16">
+              {/* <li className="mb-4 mt-16">
                 <button
                   className="flex items-center space-x-3 font-semibold"
                   onClick={() => navigate('/lecturer-dashboard/materials')}
@@ -59,15 +63,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   <FaGear />
                   <span>Settings</span>
                 </button>
-              </li>
+              </li> */}
               <li className="mb-4">
 
               <button
-                  className="flex items-center space-x-3 font-semibold "
+                  className="flex items-center space-x-3 font-semibold my-16 text-orange-600"
                   onClick={handleLogout}
                 >
                 <FaSignOutAlt />
-              <span>Logout</span>
+              <span className='text-orange-600'>Logout</span>
             </button>
               </li>
             </ul>

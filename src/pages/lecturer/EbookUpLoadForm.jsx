@@ -10,10 +10,12 @@ const EbookUploadForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [ebookFile, setEbookFile] = useState(null);
+  const [ebookImage, setEbookImage] = useState(null); // New state for image file
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleFileChange = (e) => setEbookFile(e.target.files[0]);
+  const handleEbookFileChange = (e) => setEbookFile(e.target.files[0]);
+  const handleEbookImageChange = (e) => setEbookImage(e.target.files[0]); // Handle image file change
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,35 +34,46 @@ const EbookUploadForm = () => {
         throw new Error('Please upload a PDF file.');
       }
 
+      if (!ebookImage) {
+        throw new Error('Please upload an image file.');
+      }
+
       const fileId = uuidv4();
       const storageRef = ref(storage, `ebooks/${fileId}`);
+      const imageRef = ref(storage, `ebookImages/${fileId}`); // Reference for the image
 
-      // Upload the file to Firebase Storage
+      // Upload the ebook file to Firebase Storage
       await uploadBytes(storageRef, ebookFile);
+      // Upload the image file to Firebase Storage
+      await uploadBytes(imageRef, ebookImage);
 
-      // Get the download URL of the uploaded file
+      // Get the download URLs of the uploaded files
       const ebookUrl = await getDownloadURL(storageRef);
+      const ebookImageUrl = await getDownloadURL(imageRef); // Get image URL
 
       // Store the eBook data in Firestore
       await setDoc(doc(db, 'ebooks', fileId), {
         title,
         description,
         url: ebookUrl,
+        imageUrl: ebookImageUrl, // Save image URL in Firestore
         timestamp: serverTimestamp(),
         userId: user.uid,
         userEmail: user.email,
+        displayName: user.displayName || 'Anonymous', // Add displayName to Firestore
       });
 
       // Reset form fields
       setTitle('');
       setDescription('');
       setEbookFile(null);
+      setEbookImage(null); // Reset image file
 
       // Show success message
       Swal.fire({
         icon: 'success',
         title: 'Success',
-        text: 'eBook uploaded successfully!',
+        text: 'eBook and image uploaded successfully!',
       });
     } catch (error) {
       setError(error.message);
@@ -105,7 +118,17 @@ const EbookUploadForm = () => {
           <input
             type="file"
             accept=".pdf"
-            onChange={handleFileChange}
+            onChange={handleEbookFileChange}
+            className="w-full border rounded focus:ring-2 focus:ring-blue-600 outline-none"
+            required
+          />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">Upload eBook Image (JPG/PNG)</label>
+          <input
+            type="file"
+            accept=".jpg,.jpeg,.png"
+            onChange={handleEbookImageChange} // New input for image file
             className="w-full border rounded focus:ring-2 focus:ring-blue-600 outline-none"
             required
           />
