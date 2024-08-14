@@ -110,8 +110,8 @@ const EbookList = () => {
 
   return (
     <section>
-      <h1 className='text-center'>Hello See your Ebooks</h1>
-      <div className="gap-10 my-6 grid lg:grid-cols-2">
+      <h1 className='text-center text-primary text-4xl font-semibold'> Ebooks</h1>
+      <div className="gap-10 my-6 grid lg:grid-cols-2 h-[40vh] container mx-auto">
         {ebooks.map((ebook) => (
           <EbookItem
             key={ebook.id}
