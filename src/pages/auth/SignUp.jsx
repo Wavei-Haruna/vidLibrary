@@ -48,7 +48,7 @@ const SignUp = () => {
 
       // Redirect based on user role
       if (userType === 'student') {
-       navigate('/student-dashboard');
+       navigate('/videos');
       } else if (userType === 'lecturer') {
        navigate('/lecturer-dashboard');
       }
@@ -90,7 +90,7 @@ const SignUp = () => {
 
       // Redirect based on user role
       if (userType === 'student') {
-       navigate('/student-dashboard');
+       navigate('/videos');
       } else if (userType === 'lecturer') {
        navigate('/lecturer-dashboard');
       }
