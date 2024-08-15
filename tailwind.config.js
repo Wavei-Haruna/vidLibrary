@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Ubuntu Mono', 'monospace'],
-        header: ['Edu AU VIC WA NT Hand', 'cursive'],
+        body: ['Ubuntu Mono'],
+        header: ['Roboto'],
       },
       colors: {
         primary: '#003366', // Deep blue

@@ -55,15 +55,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   <span>Upload Ebook</span>
                 </button>
               </li>
-              {/* <li className="mb-4 mt-16">
+              <li className="mb-4 mt-16">
                 <button
                   className="flex items-center space-x-3 font-semibold"
-                  onClick={() => navigate('/lecturer-dashboard/materials')}
+                  onClick={() => navigate('/lecturer-dashboard/updateProfile')}
                 >
                   <FaGear />
                   <span>Settings</span>
                 </button>
-              </li> */}
+              </li>
               <li className="mb-4">
 
               <button

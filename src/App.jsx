@@ -19,6 +19,7 @@ import ManageUsers from './pages/admin/ManageUsers';
 import EbookManagement from './pages/admin/EbookManagement';
 import AllVideos from './components/AllVideos';
 import AllEbooks from './components/AllEbooks';
+import UpdateProfile from './pages/lecturer/UpdateProfile';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                 <Route path="overview" element={<LecturerOverview />} />
                 <Route path="videos" element={<LecturerVideos />} />
                 <Route path="ebooks" element={<EbookUploadForm />} />
+                <Route path="updateProfile" element={<UpdateProfile />} />
               </Route>
             </Route>
             {/* Admin */}
