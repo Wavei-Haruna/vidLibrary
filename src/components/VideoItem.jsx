@@ -114,57 +114,57 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
   return (
     <div className="p-6 bg-gradient-to-b from-gray-800 to-gray-900  shadow-lg rounded-lg relative font-body w-80 mx-auto lg:w-full border border-gray-200">
       {editingVideo && editingVideo.id === video.id ? (
-        <div className="absolute top-0 right-0 p-4 bg-white shadow-md rounded-lg z-10 w-96 border border-gray-200">
+        <div className="absolute top-0 right-0 p-4 bg-white text-green-600 shadow-md rounded-lg z-10 w-96 border border-gray-200">
           <input
             type="text"
             value={editingVideo.title}
             onChange={(e) => setEditingVideo((prev) => ({ ...prev, title: e.target.value }))}
-            className="w-full mb-2 border text-white p-2 rounded"
+            className="w-full mb-2 border  p-2 rounded"
             placeholder="Edit title"
           />
           <textarea
             value={editingVideo.description}
             onChange={(e) => setEditingVideo((prev) => ({ ...prev, description: e.target.value }))}
-            className="w-full mb-2 border text-white p-2 rounded"
+            className="w-full mb-2 border t p-2 rounded"
             placeholder="Edit description"
           />
           <textarea
             value={editingVideo.transcript}
             onChange={(e) => setEditingVideo((prev) => ({ ...prev, transcript: e.target.value }))}
-            className="w-full mb-2 border text-white p-2 rounded"
+            className="w-full mb-2 border t p-2 rounded"
             placeholder="Edit transcript"
           />
           <input
             type="text"
             value={editingVideo.courseId}
             onChange={(e) => setEditingVideo((prev) => ({ ...prev, courseId: e.target.value }))}
-            className="w-full mb-2 border text-white p-2 rounded"
+            className="w-full mb-2 border t p-2 rounded"
             placeholder="Edit Course ID"
           />
           <input
             type="text"
             value={editingVideo.lectureName}
             onChange={(e) => setEditingVideo((prev) => ({ ...prev, lectureName: e.target.value }))}
-            className="w-full mb-2 border text-white p-2 rounded"
+            className="w-full mb-2 border t p-2 rounded"
             placeholder="Edit Lecture Name"
           />
           <input
             type="text"
             value={editingVideo.semester}
             onChange={(e) => setEditingVideo((prev) => ({ ...prev, semester: e.target.value }))}
-            className="w-full mb-2 border text-white p-2 rounded"
+            className="w-full mb-2 border text-orange-600 p-2 rounded"
             placeholder="Edit Semester"
           />
           <div className="flex justify-end space-x-2 mt-2">
             <button
               onClick={handleSaveEdit}
-              className=" text-white py-1 px-3 rounded hover:bg-green-600"
+              className=" bg-white py-1 px-3 rounded hover:bg-green-600"
             >
               Save
             </button>
             <button
               onClick={() => setEditingVideo(null)}
-              className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+              className="bg-red-500 text-orange-600 py-1 px-3 rounded hover:bg-red-600"
             >
               Cancel
             </button>
@@ -173,12 +173,12 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
       ) : (
         <>
           <div className="flex justify-between">
-            <h2 className="text-xl font-semibold text-white">{video.title}</h2>
-            <p className="text-white  text-sm">{moment(video.timestamp?.toDate()).fromNow()}</p>
+            <h2 className="text-xl font-semibold text-green-600 ">{video.title}</h2>
+            <p className="  text-sm text-white">{moment(video.timestamp?.toDate()).fromNow()}</p>
           </div>
           <hr className="mb-4" />
           <div className="mb-4">
-            <p className={`text-white ${expandedDescription ? '' : 'truncate'}`}>
+            <p className={` ${expandedDescription ? '' : 'truncate'} text-white`}>
               {video.description?.length > 250 && !expandedDescription
                 ? `${video.description.slice(0, 250)}...`
                 : video.description}
@@ -186,7 +186,7 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
             {video.description?.length > 250 && (
               <button
                 onClick={toggleDescription}
-                className="text-white hover:text-white"
+                className=" hover:text-orange-600"
               >
                 {expandedDescription ? 'Show Less' : 'Read More'}
               </button>
@@ -217,7 +217,7 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
             {video.transcript?.length > 250 && (
               <button
                 onClick={toggleTranscript}
-                className="text-white hover:text-white"
+                className="text-orange-600 hover:text-orange-600" 
               >
                 {expandedTranscript ? 'Show Less' : 'Read More'}
               </button>
@@ -226,15 +226,15 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
           <div className="grid grid-cols-2 md:grid-cols-3">
           <div className="mb-4">
             <p className="font-semibold text-green-600">Course ID:</p>
-            <p className="text-white ">{video.courseId}</p>
+            <p className="text-orange-600 ">{video.courseId}</p>
           </div>
           <div className="mb-4">
             <p className="font-semibold text-green-600">Lecture Name:</p>
-            <p className="text-white ">{video.lectureName}</p>
+            <p className="text-orange-600 ">{video.lectureName}</p>
           </div>
           <div className="mb-4">
             <p className="font-semibold text-green-600">Semester:</p>
-            <p className="text-white ">{video.semester}</p>
+            <p className="text-orange-600 ">{video.semester}</p>
           </div>
 
           </div>
@@ -242,22 +242,22 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => onLike(video.id)}
-                className="text-white hover:text-white"
+                className="text-white hover:text-orange-600"
               >
                 <AiFillLike />
               </button>
-              <span>{video.likes || 0}</span>
+              <span className='text-white'>{video.likes || 0}</span>
             </div>
             <button
               onClick={toggleComments}
-              className="flex items-center space-x-1 text-white hover:text-white"
+              className="flex items-center space-x-1 text-white hover:text-orange-600"
             >
               <AiOutlineComment />
-              <span>{comments.length}</span>
+              <span  >{comments.length}</span>
             </button>
             <button
               onClick={() => navigator.share({ title: video.title, url: video.url })}
-              className="text-white hover:text-white"
+              className="text-white hover:text-orange-600"
             >
               <AiOutlineShareAlt />
               <span className="hidden lg:flex">Share</span>
@@ -266,7 +266,7 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
               <div className="flex space-x-2">
                 <button
                   onClick={() => setEditingVideo(video)}
-                  className="text-white hover:text-white"
+                  className="text-white hover:text-orange-600"
                 >
                   <AiOutlineEdit />
                 </button>
@@ -286,11 +286,11 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
                   value={commentText}
                   onChange={handleCommentChange}
                   placeholder="Add a comment..."
-                  className="w-full border text-white p-2 rounded"
+                  className="w-full border text-orange-600 p-2 rounded"
                 />
                 <button
                   type="submit"
-                  className=" text-white py-1 px-3 rounded mt-2 hover:bg-green-600"
+                  className=" text-orange-600 py-1 px-3 rounded mt-2 hover:bg-green-600"
                 >
                   Comment
                 </button>
@@ -298,8 +298,8 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
               {displayedComments.map((comment) => (
                 <div key={comment.id} className="mb-4 border-b pb-2">
                   <p className="font-semibold text-green-600">{comment.username}</p>
-                  <p className="text-white ">{comment.text}</p>
-                  <p className="text-white  text-sm">{moment(comment.timestamp).fromNow()}</p>
+                  <p className="text-orange-600 ">{comment.text}</p>
+                  <p className="text-orange-600  text-sm">{moment(comment.timestamp).fromNow()}</p>
                   <button
                     onClick={() => handleDeleteComment(comment.id)}
                     className="text-red-500 hover:text-red-600"
@@ -311,8 +311,8 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
                       {comment.replies.map((reply) => (
                         <div key={reply.id} className="mb-2 border-b pb-2">
                           <p className="font-semibold text-green-600">{reply.username}</p>
-                          <p className="text-white ">{reply.text}</p>
-                          <p className="text-white  text-sm">{moment(reply.timestamp).fromNow()}</p>
+                          <p className="text-orange-600 ">{reply.text}</p>
+                          <p className="text-orange-600  text-sm">{moment(reply.timestamp).fromNow()}</p>
                         </div>
                       ))}
                       <form onSubmit={(e) => handleReplySubmit(comment.id, e)}>
@@ -320,11 +320,11 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
                           value={replyText[comment.id] || ''}
                           onChange={(e) => handleReplyChange(comment.id, e)}
                           placeholder="Reply..."
-                          className="w-full border text-white p-2 rounded"
+                          className="w-full border text-orange-600 p-2 rounded"
                         />
                         <button
                           type="submit"
-                          className=" text-white py-1 px-3 rounded mt-2 hover:bg-green-600"
+                          className=" text-orange-600 py-1 px-3 rounded mt-2 hover:bg-green-600"
                         >
                           Reply
                         </button>
@@ -336,7 +336,7 @@ const VideoItem = ({ video, onEdit, onDelete, onLike }) => {
               {comments.length > commentsPerPage && (
                 <button
                   onClick={toggleComments}
-                  className="text-white hover:text-white"
+                  className="text-orange-600 hover:text-orange-600"
                 >
                   {showComments ? 'Show Less' : 'Show More'}
                 </button>
