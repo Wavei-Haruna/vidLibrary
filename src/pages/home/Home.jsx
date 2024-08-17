@@ -67,7 +67,7 @@ const Home = () => {
               </div>
               <div className="flex items-center mb-4">
                 <FaPhone className="text-accent text-2xl mr-4" />
-                <p className="text-lg">+123-456-7890</p>
+                <p className="text-lg">+233 544 6672 70</p>
               </div>
               <div className="flex items-center mb-4">
                 <FaEnvelope className="text-accent text-2xl mr-4" />

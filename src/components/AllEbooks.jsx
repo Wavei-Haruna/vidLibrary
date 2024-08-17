@@ -55,11 +55,11 @@ const AllEbooks = () => {
                 className='flex items-center bg-green-500 text-white py-2 px-4 rounded shadow hover:bg-green-600 transition-colors duration-300'>
                 Download <FaDownload className='ml-2' />
               </button>
-              <button
+              {/* <button
                 onClick={() => handlePreview(ebook.url)}
                 className='bg-blue-500 text-white py-2 px-4 rounded shadow hover:bg-blue-600 transition-colors duration-300'>
                 Preview
-              </button>
+              </button> */}
             </div>
           </div>
         ))}
